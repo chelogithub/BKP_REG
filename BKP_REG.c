@@ -253,7 +253,7 @@ int BKP_RG_BYTE(RTC_HandleTypeDef *RTCreg, uint8_t WR,uint8_t addr , uint8_t byt
 					num=atoi(data);
 					if (num<256)							//Valido el dato
 					{
-						num=num<<16;							//Me desplazo al byte 1
+						num=num<<16;							//Me desplazo al byte 2
 						num2=num2|num;						//Transfiero el nro al byte seleccionado
 					}
 					HAL_PWR_EnableBkUpAccess();
@@ -279,7 +279,7 @@ int BKP_RG_BYTE(RTC_HandleTypeDef *RTCreg, uint8_t WR,uint8_t addr , uint8_t byt
 					num=atoi(data);
 					if (num<256)							//Valido el dato
 					{
-						num=num<<24;							//Me desplazo al byte 1
+						num=num<<24;							//Me desplazo al byte 3
 						num2=num2|num;						//Transfiero el nro al byte seleccionado
 					}
 					HAL_PWR_EnableBkUpAccess();
