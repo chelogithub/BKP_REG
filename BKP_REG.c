@@ -187,3 +187,115 @@ int BKP_RG_2int(RTC_HandleTypeDef *RTCreg, uint8_t WR, uint8_t addr, char * data
 			INTOA(num2,data2);
 		}
 }
+
+int BKP_RG_BYTE(RTC_HandleTypeDef *RTCreg, uint8_t WR,uint8_t addr , uint8_t byte , char * data)
+{
+	uint32_t num,num2=0;
+	if(byte>3) return(0);
+	switch(byte)
+	{
+		case 0:
+		{
+			    if(WR==1)
+				{
+					num2=HAL_RTCEx_BKUPRead(RTCreg, addr);  //leo el registro de 32 bits
+					num2=num2|(num2&0xFFFFFF00);			//Pongo el byte todo en 0
+					num=atoi(data);
+					if (num<256)							//Valido el dato
+					{
+						num2=num2|num;						//Transfiero el nro al byte seleccionado
+					}
+					HAL_PWR_EnableBkUpAccess();
+					HAL_RTCEx_BKUPWrite(RTCreg, addr, num2);
+					HAL_PWR_DisableBkUpAccess();
+				}
+				else if(WR==0)
+					{
+						num2=HAL_RTCEx_BKUPRead(RTCreg, addr);
+						num=(num2&0x000000FF);
+						INTOA(num, data);
+					}	
+			return(num);
+		}
+		break;
+		case 1:
+		{
+			    if(WR==1)
+				{
+					num2=HAL_RTCEx_BKUPRead(RTCreg, addr);  //leo el registro de 32 bits
+					num2=num2|(num2&0xFFFF00FF);			//Pongo el byte todo en 0
+					num=atoi(data);
+					if (num<256)							//Valido el dato
+					{
+						num=num<<8;							//Me desplazo al byte 1
+						num2=num2|num;						//Transfiero el nro al byte seleccionado
+					}
+					HAL_PWR_EnableBkUpAccess();
+					HAL_RTCEx_BKUPWrite(RTCreg, addr, num2);
+					HAL_PWR_DisableBkUpAccess();
+				}
+				else if(WR==0)
+					{
+						num2=HAL_RTCEx_BKUPRead(RTCreg, addr);
+						num=(num2&0x0000FF00);
+						num=num>>8;
+						INTOA(num, data);
+					}	
+			return(num);
+		}
+		break;
+		case 2:
+		{
+			    if(WR==1)
+				{
+					num2=HAL_RTCEx_BKUPRead(RTCreg, addr);  //leo el registro de 32 bits
+					num2=num2|(num2&0xFF00FFFF);			//Pongo el byte todo en 0
+					num=atoi(data);
+					if (num<256)							//Valido el dato
+					{
+						num=num<<16;							//Me desplazo al byte 1
+						num2=num2|num;						//Transfiero el nro al byte seleccionado
+					}
+					HAL_PWR_EnableBkUpAccess();
+					HAL_RTCEx_BKUPWrite(RTCreg, addr, num2);
+					HAL_PWR_DisableBkUpAccess();
+				}
+				else if(WR==0)
+					{
+						num2=HAL_RTCEx_BKUPRead(RTCreg, addr);
+						num=(num2&0x00FF0000);
+						num=num>>16;
+						INTOA(num, data);
+					}	
+			return(num);
+		}
+		break;
+		case 3:
+		{
+			    if(WR==1)
+				{
+					num2=HAL_RTCEx_BKUPRead(RTCreg, addr);  //leo el registro de 32 bits
+					num2=num2|(num2&0x00FFFFFF);			//Pongo el byte todo en 0
+					num=atoi(data);
+					if (num<256)							//Valido el dato
+					{
+						num=num<<24;							//Me desplazo al byte 1
+						num2=num2|num;						//Transfiero el nro al byte seleccionado
+					}
+					HAL_PWR_EnableBkUpAccess();
+					HAL_RTCEx_BKUPWrite(RTCreg, addr, num2);
+					HAL_PWR_DisableBkUpAccess();
+				}
+				else if(WR==0)
+					{
+						num2=HAL_RTCEx_BKUPRead(RTCreg, addr);
+						num=(num2&0xFF000000);
+						num=num>>24;
+						INTOA(num, data);
+					}	
+			return(num);
+		}
+		break;
+
+	}
+}
