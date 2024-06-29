@@ -7,6 +7,31 @@
 ******************************************************************************/
 #include "main.h"
 
+#define WIFI_IP 	0
+#define	WIFI_MSK	1
+#define	PORT		2
+#define	ETH_IP		3
+#define	ETH_TRGT_IP	4
+#define	ETH_MSK		5
+#define	SERVER		6
+#define	LORA		7
+#define	MODBUS		8
+#define	LR_SRVR		9
+#define	END_KEY		9
+
+#define BAND	 	0
+#define	NCPIN		1
+#define	NET_ID		2
+#define	ADDR		3
+
+#define SRVR	 	0
+#define	CODE		1
+#define	ID			2
+#define	REG			3
+
+#define	LR_SRVR_BT	3
+
+
 enum
 {
 	READ,
