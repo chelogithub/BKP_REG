@@ -18,6 +18,8 @@
 #define	MODBUS		8
 #define	LR_SRVR		9
 #define	END_KEY		9
+#define	WF_PASS		10
+#define	WF_SSID		13
 
 #define BAND	 	0
 #define	NCPIN		1
@@ -30,6 +32,34 @@
 #define	REG			3
 
 #define	LR_SRVR_BT	3
+
+#define SSID	 	13
+#define	PASS		10
+
+struct BKP_REG
+{
+	/* data */
+	char _WIFI_IP[16];
+	char _WIFI_MASK[16];
+	char _WIFI_PORT[6];
+	char _ETH_PORT[6];
+	char _ETH_IP[16];
+	char _ETH_TRGT_IP[16];
+	char _ETH_MASK[16];
+	char _SERVER[16];
+	char _LORA_ADDR[4];
+	char _LORA_NET_ID[4];
+	char _LORA_NCPIN[4];
+	char _LORA_BAND[4];
+	char _MBUS_REG[4];
+	char _MBUS_ID[4];
+	char _MBUS_CODE[4];
+	char _MBUS_SRVR[4];
+	char _LORA_SRVR[4];
+	char _EPKEY[4];
+	char _WIFI_PASS[13];
+	char _WIFI_SSID[29];
+};
 
 
 enum
@@ -86,5 +116,18 @@ int BKP_RG_BYTE(RTC_HandleTypeDef *, uint8_t , uint8_t ,uint8_t , char *);
 *	uint8_t	    :	Byte al que se quiere acceder 3-0			*
 *	char *		:	Vector que entrega o recibe los datos  		*
 *	char *		:	Vector que entrega o recibe los datos  		*
+*																*
+****************************************************************/
+
+BKP_REG_WF_CONN(RTC_HandleTypeDef *, uint8_t , uint8_t , struct BKP_REG *);
+
+/****************************************************************
+*	Lee o escribe el SSID o Password WIFI						*
+*																*
+*	RTC_HandleTypeDef hrtc										*
+*	uint8_t		:	1 = Escritura  0=Lectura					*
+*	uint8_t	    :	1 = SSID  0=Password 						*
+*	uint8_t	    :	Byte al que se quiere acceder 3-0			*
+*	struct *	:	Estructura de datos de backup 		  		*
 *																*
 ****************************************************************/

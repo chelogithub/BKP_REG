@@ -190,7 +190,7 @@ int BKP_RG_2int(RTC_HandleTypeDef *RTCreg, uint8_t WR, uint8_t addr, char * data
 		}
 }
 
-int BKP_RG_BYTE(RTC_HandleTypeDef *RTCreg, uint8_t WR,uint8_t addr , uint8_t byte , char * data)
+int BKP_RG_BYTE(RTC_HandleTypeDef *RTCreg, uint8_t WR, uint8_t addr , uint8_t byte , char * data)
 {
 	uint32_t num,num2=0;
 	if(byte>3) return(0);
@@ -301,3 +301,136 @@ int BKP_RG_BYTE(RTC_HandleTypeDef *RTCreg, uint8_t WR,uint8_t addr , uint8_t byt
 
 	}
 }
+
+BKP_REG_WF_CONN(RTC_HandleTypeDef *RTCreg, uint8_t WR, uint8_t WF, struct BKP_REG * nvs)
+{
+	int a=0,cdata=0;
+	uint32_t num=0,num2=0;
+	if(WR==1)
+	{
+		int i=0,b=0,w=0;
+		/* Control para SSID o PASS
+		Si WF=10 cdata=13, 
+		Si WF=13 cdata=29*/
+		if(WF==10)
+			{
+				cdata=13;
+			}
+		else if(WF==13)
+				{
+					cdata=29;
+				}
+		HAL_PWR_EnableBkUpAccess();
+		while(i<cdata)//while(i<13)
+		{ 
+			while(b<4)
+			{
+				//num=nvs->_WIFI_PASS[i];
+						if(WF==10)
+							{
+								num=nvs->_WIFI_PASS[i];
+							}
+						else if(WF==13)
+								{
+									num=nvs->_WIFI_SSID[i];
+								}
+				num=num<<24-(b*8);
+				num2=num2|num;
+				num=0;
+				b++;
+				i++;
+			}
+			HAL_RTCEx_BKUPWrite(RTCreg, WF+w, num2);
+			w++; //Incrementador de registros de 32 bit
+			b=0;
+			num2=0;
+		}
+		HAL_PWR_DisableBkUpAccess();
+
+	}
+	else if(WR==0)
+			{
+				int i=0,b=0,w=0;
+						if(WF==10)
+							{
+								cdata=3;
+							}
+						else if(WF==13)
+								{
+									cdata=7;
+								}
+				while(b<cdata)
+				{ 	num=HAL_RTCEx_BKUPRead(RTCreg, WF+b);	//Leo el registro de 32 bits
+					while(i<4)
+					{
+						num2=num>>24-(i*8);
+						num2=num2&0x000000FF;
+						if(WF==10)
+							{
+								nvs->_WIFI_PASS[w]=num2;
+							}
+						else if(WF==13)
+								{
+									nvs->_WIFI_SSID[w]=num2;
+								}	
+						i++;
+						w++;
+						num2=0;
+					}
+					i=0;
+					b++;
+				}
+			}
+}
+		/*
+		num=nvs->_WIFI_PASS[0];
+		num=num<<24;
+		num2=num2|num;
+		num=0;
+		num=nvs->_WIFI_PASS[1];
+		num=num<<16;
+		num2=num2|num;
+		num=0;
+		num=nvs->_WIFI_PASS[2];
+		num=num<<8;
+		num2=num2|num;
+		num=0;
+		num=nvs->_WIFI_PASS[3];
+		num2=num2|num;
+		HAL_PWR_EnableBkUpAccess();
+		HAL_RTCEx_BKUPWrite(RTCreg, WF, num2);
+		num=0;
+		num2=0;
+		num=nvs->_WIFI_PASS[4];
+		num=num<<24;
+		num2=num2|num;
+		num=0;
+		num=nvs->_WIFI_PASS[5];
+		num=num<<16;
+		num2=num2|num;
+		num=0;
+		num=nvs->_WIFI_PASS[6];
+		num=num<<8;
+		num2=num2|num;
+		num=0;
+		num=nvs->_WIFI_PASS[7];
+		num2=num2|num;
+		HAL_RTCEx_BKUPWrite(RTCreg, WF+1, num2);
+		num=0;
+		num2=0;
+		num=nvs->_WIFI_PASS[8];
+		num=num<<24;
+		num2=num2|num;
+		num=0;
+		num=nvs->_WIFI_PASS[9];
+		num=num<<16;
+		num2=num2|num;
+		num=0;
+		num=nvs->_WIFI_PASS[10];
+		num=num<<8;
+		num2=num2|num;
+		num=0;
+		num=nvs->_WIFI_PASS[11];
+		num2=num2|num;
+		HAL_RTCEx_BKUPWrite(RTCreg, WF+2, num2);
+		HAL_PWR_DisableBkUpAccess();*/
