@@ -132,7 +132,7 @@ BKP_REG_WF_CONN(RTC_HandleTypeDef *, uint8_t , uint8_t , struct BKP_REG *);
 *																*
 ****************************************************************/
 
-//BKP_REG_RW(RTC_HandleTypeDef *, uint8_t , struct BKP_REG *);
+BKP_REG_RW(RTC_HandleTypeDef *, uint8_t , struct BKP_REG *);
 /****************************************************************
 *	Lee o escribe los valores de backup en la estructura		*
 *																*
@@ -141,3 +141,4 @@ BKP_REG_WF_CONN(RTC_HandleTypeDef *, uint8_t , uint8_t , struct BKP_REG *);
 *	struct *	:	Estructura de datos de backup 		  		*
 *																*
 ****************************************************************/
+void BKP_REG_SHW(struct BKP_REG *, UART_HandleTypeDef *, uint8_t);

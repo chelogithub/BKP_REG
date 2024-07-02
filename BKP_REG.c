@@ -34,7 +34,7 @@ int BKP_REG_blk(RTC_HandleTypeDef *RTCreg, uint8_t WR, uint8_t regs, uint32_t * 
 
 int BKP_RG_IP(RTC_HandleTypeDef *RTCreg, uint8_t WR, uint8_t addr, char * data)
 {
-	int lng_data=0,i=0,io=0,nocteto=1;
+	int lng_data=0,io=0,nocteto=1;
 	uint32_t BKP_REG=0;
 	uint32_t octd,octe2,octe3,octe4;
 	char octc[4],oct2[4],oct3[4],oct4[4];
@@ -49,11 +49,11 @@ int BKP_RG_IP(RTC_HandleTypeDef *RTCreg, uint8_t WR, uint8_t addr, char * data)
     		octc[io]=*data;
     		*data++;
     		io++;
-    		i++;
-    		if(i==4) return(1); //Error en longitud de caracteres
+    		//i++;
+    		if(io==4) return(1); //Error en longitud de caracteres
     	}
     	*data++;
-    	i++;
+    	//i++;
     	octc[io]='\0';
     	octd=atoi(octc);
     	BKP_REG=octd;
@@ -64,11 +64,11 @@ int BKP_RG_IP(RTC_HandleTypeDef *RTCreg, uint8_t WR, uint8_t addr, char * data)
     		octc[io]=*data;
     		*data++;
     		io++;
-    		i++;
-    		if(i==4) return(1); //Error en longitud de caracteres
+    		//i++;
+    		if(io==4) return(1); //Error en longitud de caracteres
     	}
     	*data++;
-    	i++;
+    	//i++;
     	octc[io]='\0';
     	octd=atoi(octc);
 
@@ -82,11 +82,11 @@ int BKP_RG_IP(RTC_HandleTypeDef *RTCreg, uint8_t WR, uint8_t addr, char * data)
     		octc[io]=*data;
     		*data++;
     		io++;
-    		i++;
-    		if(i==4) return(1); //Error en longitud de caracteres
+    		//i++;
+    		if(io==4) return(1); //Error en longitud de caracteres
     	}
     	*data++;
-    	i++;
+    	//i++;
     	octc[io]='\0';
     	octd=atoi(octc);
 
@@ -100,11 +100,11 @@ int BKP_RG_IP(RTC_HandleTypeDef *RTCreg, uint8_t WR, uint8_t addr, char * data)
     		octc[io]=*data;
     		*data++;
     		io++;
-    		i++;
-    		if(i==4) return(1); //Error en longitud de caracteres
+    		//i++;
+    		if(io==4) return(1); //Error en longitud de caracteres
     	}
     	*data++;
-    	i++;
+    	//i++;
     	octc[io]='\0';
     	octd=atoi(octc);
 
@@ -194,7 +194,7 @@ int BKP_RG_2int(RTC_HandleTypeDef *RTCreg, uint8_t WR, uint8_t addr, char * data
 
 int BKP_RG_BYTE(RTC_HandleTypeDef *RTCreg, uint8_t WR, uint8_t addr , uint8_t byte , char * data)
 {
-	uint32_t num,num2=0;
+	uint32_t num=0,num2=0;
 	if(byte>3) return(0);
 	switch(byte)
 	{
@@ -203,7 +203,7 @@ int BKP_RG_BYTE(RTC_HandleTypeDef *RTCreg, uint8_t WR, uint8_t addr , uint8_t by
 			    if(WR==1)
 				{
 					num2=HAL_RTCEx_BKUPRead(RTCreg, addr);  //leo el registro de 32 bits
-					num2=num2|(num2&0xFFFFFF00);			//Pongo el byte todo en 0
+					num2=num2&0xFFFFFF00;//num2=num2|(num2&0xFFFFFF00);			//Pongo el byte todo en 0
 					num=atoi(data);
 					if (num<256)							//Valido el dato
 					{
@@ -229,7 +229,7 @@ int BKP_RG_BYTE(RTC_HandleTypeDef *RTCreg, uint8_t WR, uint8_t addr , uint8_t by
 			    if(WR==1)
 				{
 					num2=HAL_RTCEx_BKUPRead(RTCreg, addr);  //leo el registro de 32 bits
-					num2=num2|(num2&0xFFFF00FF);			//Pongo el byte todo en 0
+					num2=num2&0xFFFF00FF;//num2=num2|(num2&0xFFFF00FF);			//Pongo el byte todo en 0
 					num=atoi(data);
 					if (num<256)							//Valido el dato
 					{
@@ -257,7 +257,7 @@ int BKP_RG_BYTE(RTC_HandleTypeDef *RTCreg, uint8_t WR, uint8_t addr , uint8_t by
 			    if(WR==1)
 				{
 					num2=HAL_RTCEx_BKUPRead(RTCreg, addr);  //leo el registro de 32 bits
-					num2=num2|(num2&0xFF00FFFF);			//Pongo el byte todo en 0
+					num2=num2&0xFF00FFFF;//num2=num2|(num2&0xFF00FFFF);			//Pongo el byte todo en 0
 					num=atoi(data);
 					if (num<256)							//Valido el dato
 					{
@@ -285,7 +285,7 @@ int BKP_RG_BYTE(RTC_HandleTypeDef *RTCreg, uint8_t WR, uint8_t addr , uint8_t by
 			    if(WR==1)
 				{
 					num2=HAL_RTCEx_BKUPRead(RTCreg, addr);  //leo el registro de 32 bits
-					num2=num2|(num2&0x00FFFFFF);			//Pongo el byte todo en 0
+					num2=num2&0x00FFFFFF;//num2=num2|(num2&0x00FFFFFF);			//Pongo el byte todo en 0
 					num=atoi(data);
 					if (num<256)							//Valido el dato
 					{
@@ -392,18 +392,18 @@ BKP_REG_WF_CONN(RTC_HandleTypeDef *RTCreg, uint8_t WR, uint8_t WF, struct BKP_RE
 				}
 			}
 }
-/*
+
 BKP_REG_RW(RTC_HandleTypeDef *RTCreg, uint8_t WR,struct BKP_REG * NVS )
 {
 	if(WR==1)
 	{
-		  BKP_RG_IP(RTCreg, 	 WRITE, WIFI_IP		, NVS->_WIFI_IP);
+		  BKP_RG_IP(RTCreg,  WRITE, WIFI_IP		, NVS->_WIFI_IP);
 		  BKP_RG_IP(RTCreg,	 WRITE, WIFI_MSK	, NVS->_WIFI_MASK);
-		  BKP_RG_2int(RTCreg, WRITE, PORT 		, NVS->_WIFI_PORT ,NVS->_ETH_PORT);
-		  BKP_RG_IP(RTCreg, 	 WRITE, ETH_IP		, NVS->_ETH_IP);
-		  BKP_RG_IP(RTCreg, 	 WRITE, ETH_TRGT_IP	, NVS->_ETH_TRGT_IP);
-		  BKP_RG_IP(RTCreg, 	 WRITE, ETH_MSK		, NVS->_ETH_MASK);
-		  BKP_RG_IP(RTCreg, 	 WRITE, SERVER		, NVS->_SERVER);
+		  BKP_RG_2int(RTCreg,WRITE, PORT 		, NVS->_WIFI_PORT ,NVS->_ETH_PORT);
+		  BKP_RG_IP(RTCreg,  WRITE, ETH_IP		, NVS->_ETH_IP);
+		  BKP_RG_IP(RTCreg,  WRITE, ETH_TRGT_IP	, NVS->_ETH_TRGT_IP);
+		  BKP_RG_IP(RTCreg,  WRITE, ETH_MSK		, NVS->_ETH_MASK);
+		  BKP_RG_IP(RTCreg,  WRITE, SERVER		, NVS->_SERVER);
 		  BKP_RG_BYTE(RTCreg, WRITE, LORA 		, BAND 	, NVS->_LORA_BAND);
 		  BKP_RG_BYTE(RTCreg, WRITE, LORA 		, NCPIN , NVS->_LORA_NCPIN);
 		  BKP_RG_BYTE(RTCreg, WRITE, LORA 		, NET_ID, NVS->_LORA_NET_ID);
@@ -412,19 +412,19 @@ BKP_REG_RW(RTC_HandleTypeDef *RTCreg, uint8_t WR,struct BKP_REG * NVS )
 		  BKP_RG_BYTE(RTCreg, WRITE, MODBUS 		, CODE 	, NVS->_MBUS_CODE);
 		  BKP_RG_BYTE(RTCreg, WRITE, MODBUS 		, ID	, NVS->_MBUS_ID);
 		  BKP_RG_BYTE(RTCreg, WRITE, MODBUS 		, REG 	, NVS->_MBUS_REG);
-		 BKP_REG_WF_CONN(&RTCreg,WRITE, PASS, &NVS);
-		  BKP_REG_WF_CONN(&RTCreg,WRITE, SSID, &NVS);
+		  BKP_REG_WF_CONN(RTCreg,WRITE, PASS, NVS);
+		  BKP_REG_WF_CONN(RTCreg,WRITE, SSID, NVS);
 
 	}
 	else if(WR==0)
 		{
-			  BKP_RG_IP(RTCreg, 	 READ, WIFI_IP		, NVS->_WIFI_IP);
-			  BKP_RG_IP(RTCreg,	 READ, WIFI_MSK		, NVS->_WIFI_MASK);
+			  BKP_RG_IP(RTCreg,   READ, WIFI_IP		, NVS->_WIFI_IP);
+			  BKP_RG_IP(RTCreg,	  READ, WIFI_MSK		, NVS->_WIFI_MASK);
 			  BKP_RG_2int(RTCreg, READ, PORT 		, NVS->_WIFI_PORT ,NVS->_ETH_PORT);
-			  BKP_RG_IP(RTCreg, 	 READ, ETH_IP		, NVS->_ETH_IP);
-			  BKP_RG_IP(RTCreg, 	 READ, ETH_TRGT_IP	, NVS->_ETH_TRGT_IP);
-			  BKP_RG_IP(RTCreg, 	 READ, ETH_MSK		, NVS->_ETH_MASK);
-			  BKP_RG_IP(RTCreg, 	 READ, SERVER		, NVS->_SERVER);
+			  BKP_RG_IP(RTCreg,   READ, ETH_IP		, NVS->_ETH_IP);
+			  BKP_RG_IP(RTCreg,   READ, ETH_TRGT_IP	, NVS->_ETH_TRGT_IP);
+			  BKP_RG_IP(RTCreg,   READ, ETH_MSK		, NVS->_ETH_MASK);
+			  BKP_RG_IP(RTCreg,   READ, SERVER		, NVS->_SERVER);
 			  BKP_RG_BYTE(RTCreg, READ, LORA 		, BAND 	, NVS->_LORA_BAND);
 			  BKP_RG_BYTE(RTCreg, READ, LORA 		, NCPIN , NVS->_LORA_NCPIN);
 			  BKP_RG_BYTE(RTCreg, READ, LORA 		, NET_ID, NVS->_LORA_NET_ID);
@@ -435,61 +435,57 @@ BKP_REG_RW(RTC_HandleTypeDef *RTCreg, uint8_t WR,struct BKP_REG * NVS )
 			  BKP_RG_BYTE(RTCreg, READ, MODBUS 		, REG 	, NVS->_MBUS_REG);
 			  strcpy(NVS->_WIFI_PASS,"AAAAAAAAAAA");
 			  strcpy(NVS->_WIFI_SSID,"BBBBBBBBBBBBBBBBBBBBBBBBBB");
-			  BKP_REG_WF_CONN(RTCreg,READ, PASS, &NVS);
-			  BKP_REG_WF_CONN(RTCreg,READ, SSID, &NVS);
+			  BKP_REG_WF_CONN(RTCreg,READ, PASS, NVS);
+			  BKP_REG_WF_CONN(RTCreg,READ, SSID, NVS);
 		}
-}*/
+}
 
-
-		/*
-		num=nvs->_WIFI_PASS[0];
-		num=num<<24;
-		num2=num2|num;
-		num=0;
-		num=nvs->_WIFI_PASS[1];
-		num=num<<16;
-		num2=num2|num;
-		num=0;
-		num=nvs->_WIFI_PASS[2];
-		num=num<<8;
-		num2=num2|num;
-		num=0;
-		num=nvs->_WIFI_PASS[3];
-		num2=num2|num;
-		HAL_PWR_EnableBkUpAccess();
-		HAL_RTCEx_BKUPWrite(RTCreg, WF, num2);
-		num=0;
-		num2=0;
-		num=nvs->_WIFI_PASS[4];
-		num=num<<24;
-		num2=num2|num;
-		num=0;
-		num=nvs->_WIFI_PASS[5];
-		num=num<<16;
-		num2=num2|num;
-		num=0;
-		num=nvs->_WIFI_PASS[6];
-		num=num<<8;
-		num2=num2|num;
-		num=0;
-		num=nvs->_WIFI_PASS[7];
-		num2=num2|num;
-		HAL_RTCEx_BKUPWrite(RTCreg, WF+1, num2);
-		num=0;
-		num2=0;
-		num=nvs->_WIFI_PASS[8];
-		num=num<<24;
-		num2=num2|num;
-		num=0;
-		num=nvs->_WIFI_PASS[9];
-		num=num<<16;
-		num2=num2|num;
-		num=0;
-		num=nvs->_WIFI_PASS[10];
-		num=num<<8;
-		num2=num2|num;
-		num=0;
-		num=nvs->_WIFI_PASS[11];
-		num2=num2|num;
-		HAL_RTCEx_BKUPWrite(RTCreg, WF+2, num2);
-		HAL_PWR_DisableBkUpAccess();*/
+void BKP_REG_SHW(struct BKP_REG * NVS,UART_HandleTypeDef *PORTSER, uint8_t SEND)
+{ 
+	char data[4096];
+	strcpy(data,"\r\n SYS-Valores de configuracion");
+	strcat(data,"\r\n\r\nCONEXION Wi-Fi\r\n");
+	strcat(data,"\r\nSSID: ");
+	strcat(data,NVS->_WIFI_SSID);
+	strcat(data,"\r\nPASS: ");
+	strcat(data,NVS->_WIFI_PASS);
+	strcat(data,"\r\n\r\nCONFIGRACION DE INTEFAZ Wi-Fi\r\n");
+	strcat(data,"\r\nIP: ");
+	strcat(data,NVS->_WIFI_IP);
+	strcat(data,"\r\nMASK: ");
+	strcat(data,NVS->_WIFI_MASK);
+	strcat(data,"\r\nPORT: ");
+	strcat(data,NVS->_WIFI_PORT);
+	strcat(data,"\r\n\r\nCONFIGRACION DE INTEFAZ ETHERNET\r\n");
+	strcat(data,"\r\nPORT: ");
+	strcat(data,NVS->_ETH_PORT);
+	strcat(data,"\r\nIP: ");
+	strcat(data,NVS->_ETH_IP);
+	strcat(data,"\r\nDEST IP: ");
+	strcat(data,NVS->_ETH_TRGT_IP);
+	strcat(data,"\r\nMASK: ");
+	strcat(data,NVS->_ETH_MASK);
+	strcat(data,"\r\nSERVER IP: ");
+	strcat(data,NVS->_SERVER);
+	strcat(data,"\r\n\r\nCONFIGRACION DE DISPOSITIVO LORA\r\n");
+	strcat(data,"\r\nDIRECCION: ");
+	strcat(data,NVS->_LORA_ADDR);
+	strcat(data,"\r\nRED: ");
+	strcat(data,NVS->_LORA_NET_ID);
+	strcat(data,"\r\nCRIPTO: ");
+	strcat(data,NVS->_LORA_NCPIN);
+	strcat(data,"\r\nBANDA: ");
+	strcat(data,NVS->_LORA_BAND);
+	strcat(data,"\r\n\r\nCONFIGRACION MODBus\r\n");
+	strcat(data,"\r\nREGISTROS: ");
+	strcat(data,NVS->_MBUS_REG);
+	strcat(data,"\r\nID: ");
+	strcat(data,NVS->_MBUS_ID);
+	strcat(data,"\r\nCODIGO: ");
+	strcat(data,NVS->_MBUS_CODE);
+	strcat(data,"\r\nID SERVER: ");
+	strcat(data,NVS->_MBUS_SRVR);
+	ITM0_Write(data,strlen(data));
+	if(SEND==1) HAL_UART_Transmit(PORTSER, data, strlen(data), 100);
+	free(data);
+}
