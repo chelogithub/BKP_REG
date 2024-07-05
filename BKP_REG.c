@@ -489,3 +489,390 @@ void BKP_REG_SHW(struct BKP_REG * NVS,UART_HandleTypeDef *PORTSER, uint8_t SEND)
 	if(SEND==1) HAL_UART_Transmit(PORTSER, data, strlen(data), 100);
 	free(data);
 }
+
+uint8_t BKP_AP_EXTRACT(struct BKP_REG * NVS, char * a, int qty)
+{
+	char vect[32];
+    int pos=0;
+
+    //----------1 IP SERVER----------//
+	while (*a!='=')
+	{ *a++;}
+	a++;
+		pos=0;
+		do
+		{
+			vect[pos]=*a++;
+			pos++;
+		}
+		while(*a!='&');
+		vect[pos]='.';
+		pos++;
+	while (*a!='=')
+	{ *a++;}
+	a++;
+		do
+		{
+			vect[pos]=*a++;
+			pos++;
+		}
+		while(*a!='&');
+		vect[pos]='.';
+		pos++;
+	while (*a!='=')
+	{ *a++;}
+	a++;
+		do
+		{
+			vect[pos]=*a++;
+			pos++;
+		}
+		while(*a!='&');
+		vect[pos]='.';
+		pos++;
+	while (*a!='=')
+	{ *a++;}
+	a++;
+		do
+		{
+			vect[pos]=*a++;
+			pos++;
+		}
+		while(*a!='&');
+		vect[pos]='\0';
+
+	strcpy(NVS->_SERVER,vect);
+	pos=0;
+    //----------0 IP SERVER----------//
+    //----------1 EP KEY----------//
+	while (*a!='=')
+	{ *a++;}
+	a++;
+		do
+		{
+			vect[pos]=*a++;
+			pos++;
+		}
+		while(*a!='&');
+		vect[pos]='\0';
+
+	strcpy(NVS->_EPKEY,vect);
+	pos=0;
+    //----------0 EP KEY----------//
+    //----------1 ETH IP----------//
+	while (*a!='=')
+	{ *a++;}
+	a++;
+		pos=0;
+		do
+		{
+			vect[pos]=*a++;
+			pos++;
+		}
+		while(*a!='&');
+		vect[pos]='.';
+		pos++;
+	while (*a!='=')
+	{ *a++;}
+	a++;
+		do
+		{
+			vect[pos]=*a++;
+			pos++;
+		}
+		while(*a!='&');
+		vect[pos]='.';
+		pos++;
+	while (*a!='=')
+	{ *a++;}
+	a++;
+		do
+		{
+			vect[pos]=*a++;
+			pos++;
+		}
+		while(*a!='&');
+		vect[pos]='.';
+		pos++;
+	while (*a!='=')
+	{ *a++;}
+	a++;
+		do
+		{
+			vect[pos]=*a++;
+			pos++;
+		}
+		while(*a!='&');
+		vect[pos]='\0';
+
+	strcpy(NVS->_ETH_IP,vect);
+	pos=0;
+    //----------0 ETH IP----------//
+    //----------1 ETH MASK----------//
+	while (*a!='=')
+	{ *a++;}
+	a++;
+		pos=0;
+		do
+		{
+			vect[pos]=*a++;
+			pos++;
+		}
+		while(*a!='&');
+		vect[pos]='.';
+		pos++;
+	while (*a!='=')
+	{ *a++;}
+	a++;
+		do
+		{
+			vect[pos]=*a++;
+			pos++;
+		}
+		while(*a!='&');
+		vect[pos]='.';
+		pos++;
+	while (*a!='=')
+	{ *a++;}
+	a++;
+		do
+		{
+			vect[pos]=*a++;
+			pos++;
+		}
+		while(*a!='&');
+		vect[pos]='.';
+		pos++;
+	while (*a!='=')
+	{ *a++;}
+	a++;
+		do
+		{
+			vect[pos]=*a++;
+			pos++;
+		}
+		while(*a!='&');
+		vect[pos]='\0';
+
+	strcpy(NVS->_ETH_MASK,vect);
+	pos=0;
+    //----------0 ETH MASK----------//
+    //----------1 ETH PORT----------//
+	while (*a!='=')
+	{ *a++;}
+	a++;
+		do
+		{
+			vect[pos]=*a++;
+			pos++;
+		}
+		while(*a!='&');
+		vect[pos]='\0';
+
+	strcpy(NVS->_ETH_PORT,vect);
+	pos=0;
+    //----------0 ETH PORT----------//
+    //----------1 WF SSID----------//
+	while (*a!='=')
+	{ *a++;}
+	a++;
+		do
+		{
+			vect[pos]=*a++;
+			pos++;
+		}
+		while(*a!='&');
+		vect[pos]='\0';
+
+	strcpy(NVS->_WIFI_SSID,vect);
+	pos=0;
+    //----------0 WF SSID----------//
+    //----------1 WF PASS----------//
+	while (*a!='=')
+	{ *a++;}
+	a++;
+		do
+		{
+			vect[pos]=*a++;
+			pos++;
+		}
+		while(*a!='&');
+		vect[pos]='\0';
+
+	strcpy(NVS->_WIFI_PASS,vect);
+	pos=0;
+    //----------0 WF PASS----------//
+    //----------1 WF IP----------//
+	while (*a!='=')
+	{ *a++;}
+	a++;
+		pos=0;
+		do
+		{
+			vect[pos]=*a++;
+			pos++;
+		}
+		while(*a!='&');
+		vect[pos]='.';
+		pos++;
+	while (*a!='=')
+	{ *a++;}
+	a++;
+		do
+		{
+			vect[pos]=*a++;
+			pos++;
+		}
+		while(*a!='&');
+		vect[pos]='.';
+		pos++;
+	while (*a!='=')
+	{ *a++;}
+	a++;
+		do
+		{
+			vect[pos]=*a++;
+			pos++;
+		}
+		while(*a!='&');
+		vect[pos]='.';
+		pos++;
+	while (*a!='=')
+	{ *a++;}
+	a++;
+		do
+		{
+			vect[pos]=*a++;
+			pos++;
+		}
+		while(*a!='&');
+		vect[pos]='\0';
+
+	strcpy(NVS->_WIFI_IP,vect);
+	pos=0;
+    //----------0 WF IP----------//
+    //----------1 WF MASK----------//
+	while (*a!='=')
+	{ *a++;}
+	a++;
+		pos=0;
+		do
+		{
+			vect[pos]=*a++;
+			pos++;
+		}
+		while(*a!='&');
+		vect[pos]='.';
+		pos++;
+	while (*a!='=')
+	{ *a++;}
+	a++;
+		do
+		{
+			vect[pos]=*a++;
+			pos++;
+		}
+		while(*a!='&');
+		vect[pos]='.';
+		pos++;
+	while (*a!='=')
+	{ *a++;}
+	a++;
+		do
+		{
+			vect[pos]=*a++;
+			pos++;
+		}
+		while(*a!='&');
+		vect[pos]='.';
+		pos++;
+	while (*a!='=')
+	{ *a++;}
+	a++;
+		do
+		{
+			vect[pos]=*a++;
+			pos++;
+		}
+		while(*a!='&');
+		vect[pos]='\0';
+
+	strcpy(NVS->_WIFI_MASK,vect);
+	pos=0;
+    //----------0 WF MASK----------//
+    //----------1 WF PORT----------//
+	while (*a!='=')
+	{ *a++;}
+	a++;
+		do
+		{
+			vect[pos]=*a++;
+			pos++;
+		}
+		while(*a!='&');
+		vect[pos]='\0';
+
+	strcpy(NVS->_WIFI_PORT,vect);
+	pos=0;
+    //----------0 WF PORT----------//
+    //----------1 LR ADDR----------//
+	while (*a!='=')
+	{ *a++;}
+	a++;
+		do
+		{
+			vect[pos]=*a++;
+			pos++;
+		}
+		while(*a!='&');
+		vect[pos]='\0';
+
+	strcpy(NVS->_LORA_ADDR,vect);
+	pos=0;
+    //----------0 LR ADDR----------//
+    //----------1 LR NID----------//
+	while (*a!='=')
+	{ *a++;}
+	a++;
+		do
+		{
+			vect[pos]=*a++;
+			pos++;
+		}
+		while(*a!='&');
+		vect[pos]='\0';
+
+	strcpy(NVS->_LORA_NET_ID,vect);
+	pos=0;
+    //----------0 LR NID----------//
+    //----------1 LR NCP----------//
+	while (*a!='=')
+	{ *a++;}
+	a++;
+		do
+		{
+			vect[pos]=*a++;
+			pos++;
+		}
+		while(*a!='&');
+		vect[pos]='\0';
+
+	strcpy(NVS->_LORA_NCPIN,vect);
+	pos=0;
+    //----------0 LR NCP----------//
+    //----------1 LR BAND----------//
+	while (*a!='=')
+	{ *a++;}
+	a++;
+		do
+		{
+			vect[pos]=*a++;
+			pos++;
+		}
+		while(*a!=' ');
+		vect[pos]='\0';
+
+	strcpy(NVS->_LORA_BAND,vect);
+	pos=0;
+    //----------0 LR BAND----------//
+}

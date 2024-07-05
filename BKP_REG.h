@@ -142,3 +142,20 @@ BKP_REG_RW(RTC_HandleTypeDef *, uint8_t , struct BKP_REG *);
 *																*
 ****************************************************************/
 void BKP_REG_SHW(struct BKP_REG *, UART_HandleTypeDef *, uint8_t);
+/****************************************************************
+*	Muestra los valores almacenados en el estructura			*
+*																*
+*	RTC_HandleTypeDef hrtc										*
+*	UART_HandleTypeDef		:	Puerto serie para visualizar	*
+*	uint8_t					:	1: Visualiza 0: no visualiza	*
+*																*
+****************************************************************/
+uint8_t BKP_AP_EXTRACT(struct BKP_REG *,char *, int);
+/****************************************************************
+*	Extrae los datos obtenidos del webserver					*
+*																*
+*	struct *	:	Estructura de datos de backup										*
+*	char *		:	vector de datos recibidos					*
+*	int			:	Estructura de datos de backup 		  		*
+*																*
+****************************************************************/
