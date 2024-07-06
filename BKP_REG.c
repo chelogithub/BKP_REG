@@ -449,14 +449,14 @@ void BKP_REG_SHW(struct BKP_REG * NVS,UART_HandleTypeDef *PORTSER, uint8_t SEND)
 	strcat(data,NVS->_WIFI_SSID);
 	strcat(data,"\r\nPASS: ");
 	strcat(data,NVS->_WIFI_PASS);
-	strcat(data,"\r\n\r\nCONFIGRACION DE INTEFAZ Wi-Fi\r\n");
+	strcat(data,"\r\n\r\nCONFIGURACION DE INTERFAZ Wi-Fi\r\n");
 	strcat(data,"\r\nIP: ");
 	strcat(data,NVS->_WIFI_IP);
 	strcat(data,"\r\nMASK: ");
 	strcat(data,NVS->_WIFI_MASK);
 	strcat(data,"\r\nPORT: ");
 	strcat(data,NVS->_WIFI_PORT);
-	strcat(data,"\r\n\r\nCONFIGRACION DE INTEFAZ ETHERNET\r\n");
+	strcat(data,"\r\n\r\nCONFIGURACION DE INTEFAZ ETHERNET\r\n");
 	strcat(data,"\r\nPORT: ");
 	strcat(data,NVS->_ETH_PORT);
 	strcat(data,"\r\nIP: ");
@@ -467,7 +467,7 @@ void BKP_REG_SHW(struct BKP_REG * NVS,UART_HandleTypeDef *PORTSER, uint8_t SEND)
 	strcat(data,NVS->_ETH_MASK);
 	strcat(data,"\r\nSERVER IP: ");
 	strcat(data,NVS->_SERVER);
-	strcat(data,"\r\n\r\nCONFIGRACION DE DISPOSITIVO LORA\r\n");
+	strcat(data,"\r\n\r\nCONFIGURACION DE DISPOSITIVO LORA\r\n");
 	strcat(data,"\r\nDIRECCION: ");
 	strcat(data,NVS->_LORA_ADDR);
 	strcat(data,"\r\nRED: ");
@@ -476,7 +476,7 @@ void BKP_REG_SHW(struct BKP_REG * NVS,UART_HandleTypeDef *PORTSER, uint8_t SEND)
 	strcat(data,NVS->_LORA_NCPIN);
 	strcat(data,"\r\nBANDA: ");
 	strcat(data,NVS->_LORA_BAND);
-	strcat(data,"\r\n\r\nCONFIGRACION MODBus\r\n");
+	strcat(data,"\r\n\r\nCONFIGURACION MODBus\r\n");
 	strcat(data,"\r\nREGISTROS: ");
 	strcat(data,NVS->_MBUS_REG);
 	strcat(data,"\r\nID: ");
@@ -657,6 +657,55 @@ uint8_t BKP_AP_EXTRACT(struct BKP_REG * NVS, char * a, int qty)
 	strcpy(NVS->_ETH_MASK,vect);
 	pos=0;
     //----------0 ETH MASK----------//
+    //----------1 ETH TRGT IP----------//
+	while (*a!='=')
+	{ *a++;}
+	a++;
+		pos=0;
+		do
+		{
+			vect[pos]=*a++;
+			pos++;
+		}
+		while(*a!='&');
+		vect[pos]='.';
+		pos++;
+	while (*a!='=')
+	{ *a++;}
+	a++;
+		do
+		{
+			vect[pos]=*a++;
+			pos++;
+		}
+		while(*a!='&');
+		vect[pos]='.';
+		pos++;
+	while (*a!='=')
+	{ *a++;}
+	a++;
+		do
+		{
+			vect[pos]=*a++;
+			pos++;
+		}
+		while(*a!='&');
+		vect[pos]='.';
+		pos++;
+	while (*a!='=')
+	{ *a++;}
+	a++;
+		do
+		{
+			vect[pos]=*a++;
+			pos++;
+		}
+		while(*a!='&');
+		vect[pos]='\0';
+
+	strcpy(NVS->_ETH_TRGT_IP,vect);
+	pos=0;
+    //----------0 ETH TRGT IP----------//
     //----------1 ETH PORT----------//
 	while (*a!='=')
 	{ *a++;}
@@ -675,14 +724,23 @@ uint8_t BKP_AP_EXTRACT(struct BKP_REG * NVS, char * a, int qty)
     //----------1 WF SSID----------//
 	while (*a!='=')
 	{ *a++;}
-	a++;
+	//a++;
 		do
 		{
-			vect[pos]=*a++;
-			pos++;
+			*a++;
+			if(*a=='+')
+			{
+				vect[pos]=' ';
+				pos++;
+			}else
+				{
+					vect[pos]=*a;
+					pos++;
+				}
+
 		}
 		while(*a!='&');
-		vect[pos]='\0';
+		vect[pos-1]='\0';
 
 	strcpy(NVS->_WIFI_SSID,vect);
 	pos=0;
@@ -815,6 +873,81 @@ uint8_t BKP_AP_EXTRACT(struct BKP_REG * NVS, char * a, int qty)
 	strcpy(NVS->_WIFI_PORT,vect);
 	pos=0;
     //----------0 WF PORT----------//
+    //----------1 MB REG START----------//
+	while (*a!='=')
+	{ *a++;}
+	a++;
+		do
+		{
+			vect[pos]=*a++;
+			pos++;
+		}
+		while(*a!='&');
+		vect[pos]='\0';
+
+	strcpy(NVS->_MBUS_REG,vect);
+	pos=0;
+    //----------0 MB REG START----------//
+    //----------1 MB ID LOCAL----------//
+	while (*a!='=')
+	{ *a++;}
+	a++;
+		do
+		{
+			vect[pos]=*a++;
+			pos++;
+		}
+		while(*a!='&');
+		vect[pos]='\0';
+
+	strcpy(NVS->_MBUS_ID,vect);
+	pos=0;
+    //----------0 MB MB ID LOCAL----------//
+    //----------1 MB CODE----------//
+	while (*a!='=')
+	{ *a++;}
+	a++;
+		do
+		{
+			vect[pos]=*a++;
+			pos++;
+		}
+		while(*a!='&');
+		vect[pos]='\0';
+
+	strcpy(NVS->_MBUS_CODE,vect);
+	pos=0;
+    //----------0 MB CODE----------//
+    //----------1 MB ID SRVR----------//
+	while (*a!='=')
+	{ *a++;}
+	a++;
+		do
+		{
+			vect[pos]=*a++;
+			pos++;
+		}
+		while(*a!='&');
+		vect[pos]='\0';
+
+	strcpy(NVS->_MBUS_SRVR,vect);
+	pos=0;
+    //----------0 MB ID DRVR----------//
+    //----------1 LR SERVER----------//
+	while (*a!='=')
+	{ *a++;}
+	a++;
+		do
+		{
+			vect[pos]=*a++;
+			pos++;
+		}
+		while(*a!='&');
+		vect[pos]='\0';
+
+	strcpy(NVS->_LORA_SRVR,vect);
+	pos=0;
+    //----------0 LR SERVER----------//
     //----------1 LR ADDR----------//
 	while (*a!='=')
 	{ *a++;}
