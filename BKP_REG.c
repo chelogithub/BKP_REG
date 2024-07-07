@@ -34,7 +34,7 @@ int BKP_REG_blk(RTC_HandleTypeDef *RTCreg, uint8_t WR, uint8_t regs, uint32_t * 
 
 int BKP_RG_IP(RTC_HandleTypeDef *RTCreg, uint8_t WR, uint8_t addr, char * data)
 {
-	int lng_data=0,i=0,io=0,nocteto=1;
+	int lng_data=0,io=0,nocteto=1;
 	uint32_t BKP_REG=0;
 	uint32_t octd,octe2,octe3,octe4;
 	char octc[4],oct2[4],oct3[4],oct4[4];
@@ -49,11 +49,11 @@ int BKP_RG_IP(RTC_HandleTypeDef *RTCreg, uint8_t WR, uint8_t addr, char * data)
     		octc[io]=*data;
     		*data++;
     		io++;
-    		i++;
-    		if(i==4) return(1); //Error en longitud de caracteres
+    		//i++;
+    		if(io==4) return(1); //Error en longitud de caracteres
     	}
     	*data++;
-    	i++;
+    	//i++;
     	octc[io]='\0';
     	octd=atoi(octc);
     	BKP_REG=octd;
@@ -64,11 +64,11 @@ int BKP_RG_IP(RTC_HandleTypeDef *RTCreg, uint8_t WR, uint8_t addr, char * data)
     		octc[io]=*data;
     		*data++;
     		io++;
-    		i++;
-    		if(i==4) return(1); //Error en longitud de caracteres
+    		//i++;
+    		if(io==4) return(1); //Error en longitud de caracteres
     	}
     	*data++;
-    	i++;
+    	//i++;
     	octc[io]='\0';
     	octd=atoi(octc);
 
@@ -82,11 +82,11 @@ int BKP_RG_IP(RTC_HandleTypeDef *RTCreg, uint8_t WR, uint8_t addr, char * data)
     		octc[io]=*data;
     		*data++;
     		io++;
-    		i++;
-    		if(i==4) return(1); //Error en longitud de caracteres
+    		//i++;
+    		if(io==4) return(1); //Error en longitud de caracteres
     	}
     	*data++;
-    	i++;
+    	//i++;
     	octc[io]='\0';
     	octd=atoi(octc);
 
@@ -100,11 +100,11 @@ int BKP_RG_IP(RTC_HandleTypeDef *RTCreg, uint8_t WR, uint8_t addr, char * data)
     		octc[io]=*data;
     		*data++;
     		io++;
-    		i++;
-    		if(i==4) return(1); //Error en longitud de caracteres
+    		//i++;
+    		if(io==4) return(1); //Error en longitud de caracteres
     	}
     	*data++;
-    	i++;
+    	//i++;
     	octc[io]='\0';
     	octd=atoi(octc);
 
@@ -122,6 +122,7 @@ int BKP_RG_IP(RTC_HandleTypeDef *RTCreg, uint8_t WR, uint8_t addr, char * data)
 		char returnVector[15];
 		returnVector[0]='\0';
 		uint32_t shifts=0;
+		data[0]='\0';  //240107
 
 		BKP_REG=HAL_RTCEx_BKUPRead(RTCreg, addr);	//Leo el dato en memoria de 32bits
 
@@ -152,6 +153,7 @@ int BKP_RG_IP(RTC_HandleTypeDef *RTCreg, uint8_t WR, uint8_t addr, char * data)
 		INTOA(octd, octc);		//Se pasa el entero a char y se guarda en octc.
 
 		strncat(data,octc,strlen(octc));
+		data[strlen(data)]='\0'; //240107
 		}
 
 
@@ -192,7 +194,7 @@ int BKP_RG_2int(RTC_HandleTypeDef *RTCreg, uint8_t WR, uint8_t addr, char * data
 
 int BKP_RG_BYTE(RTC_HandleTypeDef *RTCreg, uint8_t WR, uint8_t addr , uint8_t byte , char * data)
 {
-	uint32_t num,num2=0;
+	uint32_t num=0,num2=0;
 	if(byte>3) return(0);
 	switch(byte)
 	{
@@ -201,7 +203,7 @@ int BKP_RG_BYTE(RTC_HandleTypeDef *RTCreg, uint8_t WR, uint8_t addr , uint8_t by
 			    if(WR==1)
 				{
 					num2=HAL_RTCEx_BKUPRead(RTCreg, addr);  //leo el registro de 32 bits
-					num2=num2|(num2&0xFFFFFF00);			//Pongo el byte todo en 0
+					num2=num2&0xFFFFFF00;//num2=num2|(num2&0xFFFFFF00);			//Pongo el byte todo en 0
 					num=atoi(data);
 					if (num<256)							//Valido el dato
 					{
@@ -215,7 +217,9 @@ int BKP_RG_BYTE(RTC_HandleTypeDef *RTCreg, uint8_t WR, uint8_t addr , uint8_t by
 					{
 						num2=HAL_RTCEx_BKUPRead(RTCreg, addr);
 						num=(num2&0x000000FF);
+						data[0]='\0'; //240107
 						INTOA(num, data);
+						data[strlen(data)]='\0'; //240107
 					}	
 			return(num);
 		}
@@ -225,7 +229,7 @@ int BKP_RG_BYTE(RTC_HandleTypeDef *RTCreg, uint8_t WR, uint8_t addr , uint8_t by
 			    if(WR==1)
 				{
 					num2=HAL_RTCEx_BKUPRead(RTCreg, addr);  //leo el registro de 32 bits
-					num2=num2|(num2&0xFFFF00FF);			//Pongo el byte todo en 0
+					num2=num2&0xFFFF00FF;//num2=num2|(num2&0xFFFF00FF);			//Pongo el byte todo en 0
 					num=atoi(data);
 					if (num<256)							//Valido el dato
 					{
@@ -241,7 +245,9 @@ int BKP_RG_BYTE(RTC_HandleTypeDef *RTCreg, uint8_t WR, uint8_t addr , uint8_t by
 						num2=HAL_RTCEx_BKUPRead(RTCreg, addr);
 						num=(num2&0x0000FF00);
 						num=num>>8;
+						data[0]='\0'; //240107
 						INTOA(num, data);
+						data[strlen(data)]='\0'; //240107
 					}	
 			return(num);
 		}
@@ -251,7 +257,7 @@ int BKP_RG_BYTE(RTC_HandleTypeDef *RTCreg, uint8_t WR, uint8_t addr , uint8_t by
 			    if(WR==1)
 				{
 					num2=HAL_RTCEx_BKUPRead(RTCreg, addr);  //leo el registro de 32 bits
-					num2=num2|(num2&0xFF00FFFF);			//Pongo el byte todo en 0
+					num2=num2&0xFF00FFFF;//num2=num2|(num2&0xFF00FFFF);			//Pongo el byte todo en 0
 					num=atoi(data);
 					if (num<256)							//Valido el dato
 					{
@@ -267,7 +273,9 @@ int BKP_RG_BYTE(RTC_HandleTypeDef *RTCreg, uint8_t WR, uint8_t addr , uint8_t by
 						num2=HAL_RTCEx_BKUPRead(RTCreg, addr);
 						num=(num2&0x00FF0000);
 						num=num>>16;
+						data[0]='\0'; //240107
 						INTOA(num, data);
+						data[strlen(data)]='\0'; //240107
 					}	
 			return(num);
 		}
@@ -277,7 +285,7 @@ int BKP_RG_BYTE(RTC_HandleTypeDef *RTCreg, uint8_t WR, uint8_t addr , uint8_t by
 			    if(WR==1)
 				{
 					num2=HAL_RTCEx_BKUPRead(RTCreg, addr);  //leo el registro de 32 bits
-					num2=num2|(num2&0x00FFFFFF);			//Pongo el byte todo en 0
+					num2=num2&0x00FFFFFF;//num2=num2|(num2&0x00FFFFFF);			//Pongo el byte todo en 0
 					num=atoi(data);
 					if (num<256)							//Valido el dato
 					{
@@ -293,7 +301,9 @@ int BKP_RG_BYTE(RTC_HandleTypeDef *RTCreg, uint8_t WR, uint8_t addr , uint8_t by
 						num2=HAL_RTCEx_BKUPRead(RTCreg, addr);
 						num=(num2&0xFF000000);
 						num=num>>24;
+						data[0]='\0'; //240107
 						INTOA(num, data);
+						data[strlen(data)]='\0'; //240107
 					}	
 			return(num);
 		}
@@ -382,55 +392,620 @@ BKP_REG_WF_CONN(RTC_HandleTypeDef *RTCreg, uint8_t WR, uint8_t WF, struct BKP_RE
 				}
 			}
 }
-		/*
-		num=nvs->_WIFI_PASS[0];
-		num=num<<24;
-		num2=num2|num;
-		num=0;
-		num=nvs->_WIFI_PASS[1];
-		num=num<<16;
-		num2=num2|num;
-		num=0;
-		num=nvs->_WIFI_PASS[2];
-		num=num<<8;
-		num2=num2|num;
-		num=0;
-		num=nvs->_WIFI_PASS[3];
-		num2=num2|num;
-		HAL_PWR_EnableBkUpAccess();
-		HAL_RTCEx_BKUPWrite(RTCreg, WF, num2);
-		num=0;
-		num2=0;
-		num=nvs->_WIFI_PASS[4];
-		num=num<<24;
-		num2=num2|num;
-		num=0;
-		num=nvs->_WIFI_PASS[5];
-		num=num<<16;
-		num2=num2|num;
-		num=0;
-		num=nvs->_WIFI_PASS[6];
-		num=num<<8;
-		num2=num2|num;
-		num=0;
-		num=nvs->_WIFI_PASS[7];
-		num2=num2|num;
-		HAL_RTCEx_BKUPWrite(RTCreg, WF+1, num2);
-		num=0;
-		num2=0;
-		num=nvs->_WIFI_PASS[8];
-		num=num<<24;
-		num2=num2|num;
-		num=0;
-		num=nvs->_WIFI_PASS[9];
-		num=num<<16;
-		num2=num2|num;
-		num=0;
-		num=nvs->_WIFI_PASS[10];
-		num=num<<8;
-		num2=num2|num;
-		num=0;
-		num=nvs->_WIFI_PASS[11];
-		num2=num2|num;
-		HAL_RTCEx_BKUPWrite(RTCreg, WF+2, num2);
-		HAL_PWR_DisableBkUpAccess();*/
+
+BKP_REG_RW(RTC_HandleTypeDef *RTCreg, uint8_t WR,struct BKP_REG * NVS )
+{
+	if(WR==1)
+	{
+		  BKP_RG_IP(RTCreg,  WRITE, WIFI_IP		, NVS->_WIFI_IP);
+		  BKP_RG_IP(RTCreg,	 WRITE, WIFI_MSK	, NVS->_WIFI_MASK);
+		  BKP_RG_2int(RTCreg,WRITE, PORT 		, NVS->_WIFI_PORT ,NVS->_ETH_PORT);
+		  BKP_RG_IP(RTCreg,  WRITE, ETH_IP		, NVS->_ETH_IP);
+		  BKP_RG_IP(RTCreg,  WRITE, ETH_TRGT_IP	, NVS->_ETH_TRGT_IP);
+		  BKP_RG_IP(RTCreg,  WRITE, ETH_MSK		, NVS->_ETH_MASK);
+		  BKP_RG_IP(RTCreg,  WRITE, SERVER		, NVS->_SERVER);
+		  BKP_RG_BYTE(RTCreg, WRITE, LORA 		, BAND 	, NVS->_LORA_BAND);
+		  BKP_RG_BYTE(RTCreg, WRITE, LORA 		, NCPIN , NVS->_LORA_NCPIN);
+		  BKP_RG_BYTE(RTCreg, WRITE, LORA 		, NET_ID, NVS->_LORA_NET_ID);
+		  BKP_RG_BYTE(RTCreg, WRITE, LORA 		, ADDR 	, NVS->_LORA_ADDR);
+		  BKP_RG_BYTE(RTCreg, WRITE, MODBUS 		, SRVR 	, NVS->_MBUS_SRVR);
+		  BKP_RG_BYTE(RTCreg, WRITE, MODBUS 		, CODE 	, NVS->_MBUS_CODE);
+		  BKP_RG_BYTE(RTCreg, WRITE, MODBUS 		, ID	, NVS->_MBUS_ID);
+		  BKP_RG_BYTE(RTCreg, WRITE, MODBUS 		, REG 	, NVS->_MBUS_REG);
+		  BKP_REG_WF_CONN(RTCreg,WRITE, PASS, NVS);
+		  BKP_REG_WF_CONN(RTCreg,WRITE, SSID, NVS);
+
+	}
+	else if(WR==0)
+		{
+			  BKP_RG_IP(RTCreg,   READ, WIFI_IP		, NVS->_WIFI_IP);
+			  BKP_RG_IP(RTCreg,	  READ, WIFI_MSK		, NVS->_WIFI_MASK);
+			  BKP_RG_2int(RTCreg, READ, PORT 		, NVS->_WIFI_PORT ,NVS->_ETH_PORT);
+			  BKP_RG_IP(RTCreg,   READ, ETH_IP		, NVS->_ETH_IP);
+			  BKP_RG_IP(RTCreg,   READ, ETH_TRGT_IP	, NVS->_ETH_TRGT_IP);
+			  BKP_RG_IP(RTCreg,   READ, ETH_MSK		, NVS->_ETH_MASK);
+			  BKP_RG_IP(RTCreg,   READ, SERVER		, NVS->_SERVER);
+			  BKP_RG_BYTE(RTCreg, READ, LORA 		, BAND 	, NVS->_LORA_BAND);
+			  BKP_RG_BYTE(RTCreg, READ, LORA 		, NCPIN , NVS->_LORA_NCPIN);
+			  BKP_RG_BYTE(RTCreg, READ, LORA 		, NET_ID, NVS->_LORA_NET_ID);
+			  BKP_RG_BYTE(RTCreg, READ, LORA 		, ADDR 	, NVS->_LORA_ADDR);
+			  BKP_RG_BYTE(RTCreg, READ, MODBUS 		, SRVR 	, NVS->_MBUS_SRVR);
+			  BKP_RG_BYTE(RTCreg, READ, MODBUS 		, CODE 	, NVS->_MBUS_CODE);
+			  BKP_RG_BYTE(RTCreg, READ, MODBUS 		, ID	, NVS->_MBUS_ID);
+			  BKP_RG_BYTE(RTCreg, READ, MODBUS 		, REG 	, NVS->_MBUS_REG);
+			  strcpy(NVS->_WIFI_PASS,"AAAAAAAAAAA");
+			  strcpy(NVS->_WIFI_SSID,"BBBBBBBBBBBBBBBBBBBBBBBBBB");
+			  BKP_REG_WF_CONN(RTCreg,READ, PASS, NVS);
+			  BKP_REG_WF_CONN(RTCreg,READ, SSID, NVS);
+		}
+}
+
+void BKP_REG_SHW(struct BKP_REG * NVS,UART_HandleTypeDef *PORTSER, uint8_t SEND)
+{ 
+	char data[4096];
+	strcpy(data,"\r\n SYS-Valores de configuracion");
+	strcat(data,"\r\n\r\nCONEXION Wi-Fi\r\n");
+	strcat(data,"\r\nSSID: ");
+	strcat(data,NVS->_WIFI_SSID);
+	strcat(data,"\r\nPASS: ");
+	strcat(data,NVS->_WIFI_PASS);
+	strcat(data,"\r\n\r\nCONFIGURACION DE INTERFAZ Wi-Fi\r\n");
+	strcat(data,"\r\nIP: ");
+	strcat(data,NVS->_WIFI_IP);
+	strcat(data,"\r\nMASK: ");
+	strcat(data,NVS->_WIFI_MASK);
+	strcat(data,"\r\nPORT: ");
+	strcat(data,NVS->_WIFI_PORT);
+	strcat(data,"\r\n\r\nCONFIGURACION DE INTEFAZ ETHERNET\r\n");
+	strcat(data,"\r\nPORT: ");
+	strcat(data,NVS->_ETH_PORT);
+	strcat(data,"\r\nIP: ");
+	strcat(data,NVS->_ETH_IP);
+	strcat(data,"\r\nDEST IP: ");
+	strcat(data,NVS->_ETH_TRGT_IP);
+	strcat(data,"\r\nMASK: ");
+	strcat(data,NVS->_ETH_MASK);
+	strcat(data,"\r\nSERVER IP: ");
+	strcat(data,NVS->_SERVER);
+	strcat(data,"\r\n\r\nCONFIGURACION DE DISPOSITIVO LORA\r\n");
+	strcat(data,"\r\nDIRECCION: ");
+	strcat(data,NVS->_LORA_ADDR);
+	strcat(data,"\r\nRED: ");
+	strcat(data,NVS->_LORA_NET_ID);
+	strcat(data,"\r\nCRIPTO: ");
+	strcat(data,NVS->_LORA_NCPIN);
+	strcat(data,"\r\nBANDA: ");
+	strcat(data,NVS->_LORA_BAND);
+	strcat(data,"\r\n\r\nCONFIGURACION MODBus\r\n");
+	strcat(data,"\r\nREGISTROS: ");
+	strcat(data,NVS->_MBUS_REG);
+	strcat(data,"\r\nID: ");
+	strcat(data,NVS->_MBUS_ID);
+	strcat(data,"\r\nCODIGO: ");
+	strcat(data,NVS->_MBUS_CODE);
+	strcat(data,"\r\nID SERVER: ");
+	strcat(data,NVS->_MBUS_SRVR);
+	ITM0_Write(data,strlen(data));
+	if(SEND==1) HAL_UART_Transmit(PORTSER, data, strlen(data), 100);
+	free(data);
+}
+
+uint8_t BKP_AP_EXTRACT(struct BKP_REG * NVS, char * a, int qty)
+{
+	char vect[32];
+    int pos=0;
+
+    //----------1 IP SERVER----------//
+	while (*a!='=')
+	{ *a++;}
+	a++;
+		pos=0;
+		do
+		{
+			vect[pos]=*a++;
+			pos++;
+		}
+		while(*a!='&');
+		vect[pos]='.';
+		pos++;
+	while (*a!='=')
+	{ *a++;}
+	a++;
+		do
+		{
+			vect[pos]=*a++;
+			pos++;
+		}
+		while(*a!='&');
+		vect[pos]='.';
+		pos++;
+	while (*a!='=')
+	{ *a++;}
+	a++;
+		do
+		{
+			vect[pos]=*a++;
+			pos++;
+		}
+		while(*a!='&');
+		vect[pos]='.';
+		pos++;
+	while (*a!='=')
+	{ *a++;}
+	a++;
+		do
+		{
+			vect[pos]=*a++;
+			pos++;
+		}
+		while(*a!='&');
+		vect[pos]='\0';
+
+	strcpy(NVS->_SERVER,vect);
+	pos=0;
+    //----------0 IP SERVER----------//
+    //----------1 EP KEY----------//
+	while (*a!='=')
+	{ *a++;}
+	a++;
+		do
+		{
+			vect[pos]=*a++;
+			pos++;
+		}
+		while(*a!='&');
+		vect[pos]='\0';
+
+	strcpy(NVS->_EPKEY,vect);
+	pos=0;
+    //----------0 EP KEY----------//
+    //----------1 ETH IP----------//
+	while (*a!='=')
+	{ *a++;}
+	a++;
+		pos=0;
+		do
+		{
+			vect[pos]=*a++;
+			pos++;
+		}
+		while(*a!='&');
+		vect[pos]='.';
+		pos++;
+	while (*a!='=')
+	{ *a++;}
+	a++;
+		do
+		{
+			vect[pos]=*a++;
+			pos++;
+		}
+		while(*a!='&');
+		vect[pos]='.';
+		pos++;
+	while (*a!='=')
+	{ *a++;}
+	a++;
+		do
+		{
+			vect[pos]=*a++;
+			pos++;
+		}
+		while(*a!='&');
+		vect[pos]='.';
+		pos++;
+	while (*a!='=')
+	{ *a++;}
+	a++;
+		do
+		{
+			vect[pos]=*a++;
+			pos++;
+		}
+		while(*a!='&');
+		vect[pos]='\0';
+
+	strcpy(NVS->_ETH_IP,vect);
+	pos=0;
+    //----------0 ETH IP----------//
+    //----------1 ETH MASK----------//
+	while (*a!='=')
+	{ *a++;}
+	a++;
+		pos=0;
+		do
+		{
+			vect[pos]=*a++;
+			pos++;
+		}
+		while(*a!='&');
+		vect[pos]='.';
+		pos++;
+	while (*a!='=')
+	{ *a++;}
+	a++;
+		do
+		{
+			vect[pos]=*a++;
+			pos++;
+		}
+		while(*a!='&');
+		vect[pos]='.';
+		pos++;
+	while (*a!='=')
+	{ *a++;}
+	a++;
+		do
+		{
+			vect[pos]=*a++;
+			pos++;
+		}
+		while(*a!='&');
+		vect[pos]='.';
+		pos++;
+	while (*a!='=')
+	{ *a++;}
+	a++;
+		do
+		{
+			vect[pos]=*a++;
+			pos++;
+		}
+		while(*a!='&');
+		vect[pos]='\0';
+
+	strcpy(NVS->_ETH_MASK,vect);
+	pos=0;
+    //----------0 ETH MASK----------//
+    //----------1 ETH TRGT IP----------//
+	while (*a!='=')
+	{ *a++;}
+	a++;
+		pos=0;
+		do
+		{
+			vect[pos]=*a++;
+			pos++;
+		}
+		while(*a!='&');
+		vect[pos]='.';
+		pos++;
+	while (*a!='=')
+	{ *a++;}
+	a++;
+		do
+		{
+			vect[pos]=*a++;
+			pos++;
+		}
+		while(*a!='&');
+		vect[pos]='.';
+		pos++;
+	while (*a!='=')
+	{ *a++;}
+	a++;
+		do
+		{
+			vect[pos]=*a++;
+			pos++;
+		}
+		while(*a!='&');
+		vect[pos]='.';
+		pos++;
+	while (*a!='=')
+	{ *a++;}
+	a++;
+		do
+		{
+			vect[pos]=*a++;
+			pos++;
+		}
+		while(*a!='&');
+		vect[pos]='\0';
+
+	strcpy(NVS->_ETH_TRGT_IP,vect);
+	pos=0;
+    //----------0 ETH TRGT IP----------//
+    //----------1 ETH PORT----------//
+	while (*a!='=')
+	{ *a++;}
+	a++;
+		do
+		{
+			vect[pos]=*a++;
+			pos++;
+		}
+		while(*a!='&');
+		vect[pos]='\0';
+
+	strcpy(NVS->_ETH_PORT,vect);
+	pos=0;
+    //----------0 ETH PORT----------//
+    //----------1 WF SSID----------//
+	while (*a!='=')
+	{ *a++;}
+	//a++;
+		do
+		{
+			*a++;
+			if(*a=='+')
+			{
+				vect[pos]=' ';
+				pos++;
+			}else
+				{
+					vect[pos]=*a;
+					pos++;
+				}
+
+		}
+		while(*a!='&');
+		vect[pos-1]='\0';
+
+	strcpy(NVS->_WIFI_SSID,vect);
+	pos=0;
+    //----------0 WF SSID----------//
+    //----------1 WF PASS----------//
+	while (*a!='=')
+	{ *a++;}
+	a++;
+		do
+		{
+			vect[pos]=*a++;
+			pos++;
+		}
+		while(*a!='&');
+		vect[pos]='\0';
+
+	strcpy(NVS->_WIFI_PASS,vect);
+	pos=0;
+    //----------0 WF PASS----------//
+    //----------1 WF IP----------//
+	while (*a!='=')
+	{ *a++;}
+	a++;
+		pos=0;
+		do
+		{
+			vect[pos]=*a++;
+			pos++;
+		}
+		while(*a!='&');
+		vect[pos]='.';
+		pos++;
+	while (*a!='=')
+	{ *a++;}
+	a++;
+		do
+		{
+			vect[pos]=*a++;
+			pos++;
+		}
+		while(*a!='&');
+		vect[pos]='.';
+		pos++;
+	while (*a!='=')
+	{ *a++;}
+	a++;
+		do
+		{
+			vect[pos]=*a++;
+			pos++;
+		}
+		while(*a!='&');
+		vect[pos]='.';
+		pos++;
+	while (*a!='=')
+	{ *a++;}
+	a++;
+		do
+		{
+			vect[pos]=*a++;
+			pos++;
+		}
+		while(*a!='&');
+		vect[pos]='\0';
+
+	strcpy(NVS->_WIFI_IP,vect);
+	pos=0;
+    //----------0 WF IP----------//
+    //----------1 WF MASK----------//
+	while (*a!='=')
+	{ *a++;}
+	a++;
+		pos=0;
+		do
+		{
+			vect[pos]=*a++;
+			pos++;
+		}
+		while(*a!='&');
+		vect[pos]='.';
+		pos++;
+	while (*a!='=')
+	{ *a++;}
+	a++;
+		do
+		{
+			vect[pos]=*a++;
+			pos++;
+		}
+		while(*a!='&');
+		vect[pos]='.';
+		pos++;
+	while (*a!='=')
+	{ *a++;}
+	a++;
+		do
+		{
+			vect[pos]=*a++;
+			pos++;
+		}
+		while(*a!='&');
+		vect[pos]='.';
+		pos++;
+	while (*a!='=')
+	{ *a++;}
+	a++;
+		do
+		{
+			vect[pos]=*a++;
+			pos++;
+		}
+		while(*a!='&');
+		vect[pos]='\0';
+
+	strcpy(NVS->_WIFI_MASK,vect);
+	pos=0;
+    //----------0 WF MASK----------//
+    //----------1 WF PORT----------//
+	while (*a!='=')
+	{ *a++;}
+	a++;
+		do
+		{
+			vect[pos]=*a++;
+			pos++;
+		}
+		while(*a!='&');
+		vect[pos]='\0';
+
+	strcpy(NVS->_WIFI_PORT,vect);
+	pos=0;
+    //----------0 WF PORT----------//
+    //----------1 MB REG START----------//
+	while (*a!='=')
+	{ *a++;}
+	a++;
+		do
+		{
+			vect[pos]=*a++;
+			pos++;
+		}
+		while(*a!='&');
+		vect[pos]='\0';
+
+	strcpy(NVS->_MBUS_REG,vect);
+	pos=0;
+    //----------0 MB REG START----------//
+    //----------1 MB ID LOCAL----------//
+	while (*a!='=')
+	{ *a++;}
+	a++;
+		do
+		{
+			vect[pos]=*a++;
+			pos++;
+		}
+		while(*a!='&');
+		vect[pos]='\0';
+
+	strcpy(NVS->_MBUS_ID,vect);
+	pos=0;
+    //----------0 MB MB ID LOCAL----------//
+    //----------1 MB CODE----------//
+	while (*a!='=')
+	{ *a++;}
+	a++;
+		do
+		{
+			vect[pos]=*a++;
+			pos++;
+		}
+		while(*a!='&');
+		vect[pos]='\0';
+
+	strcpy(NVS->_MBUS_CODE,vect);
+	pos=0;
+    //----------0 MB CODE----------//
+    //----------1 MB ID SRVR----------//
+	while (*a!='=')
+	{ *a++;}
+	a++;
+		do
+		{
+			vect[pos]=*a++;
+			pos++;
+		}
+		while(*a!='&');
+		vect[pos]='\0';
+
+	strcpy(NVS->_MBUS_SRVR,vect);
+	pos=0;
+    //----------0 MB ID DRVR----------//
+    //----------1 LR SERVER----------//
+	while (*a!='=')
+	{ *a++;}
+	a++;
+		do
+		{
+			vect[pos]=*a++;
+			pos++;
+		}
+		while(*a!='&');
+		vect[pos]='\0';
+
+	strcpy(NVS->_LORA_SRVR,vect);
+	pos=0;
+    //----------0 LR SERVER----------//
+    //----------1 LR ADDR----------//
+	while (*a!='=')
+	{ *a++;}
+	a++;
+		do
+		{
+			vect[pos]=*a++;
+			pos++;
+		}
+		while(*a!='&');
+		vect[pos]='\0';
+
+	strcpy(NVS->_LORA_ADDR,vect);
+	pos=0;
+    //----------0 LR ADDR----------//
+    //----------1 LR NID----------//
+	while (*a!='=')
+	{ *a++;}
+	a++;
+		do
+		{
+			vect[pos]=*a++;
+			pos++;
+		}
+		while(*a!='&');
+		vect[pos]='\0';
+
+	strcpy(NVS->_LORA_NET_ID,vect);
+	pos=0;
+    //----------0 LR NID----------//
+    //----------1 LR NCP----------//
+	while (*a!='=')
+	{ *a++;}
+	a++;
+		do
+		{
+			vect[pos]=*a++;
+			pos++;
+		}
+		while(*a!='&');
+		vect[pos]='\0';
+
+	strcpy(NVS->_LORA_NCPIN,vect);
+	pos=0;
+    //----------0 LR NCP----------//
+    //----------1 LR BAND----------//
+	while (*a!='=')
+	{ *a++;}
+	a++;
+		do
+		{
+			vect[pos]=*a++;
+			pos++;
+		}
+		while(*a!=' ');
+		vect[pos]='\0';
+
+	strcpy(NVS->_LORA_BAND,vect);
+	pos=0;
+    //----------0 LR BAND----------//
+}
