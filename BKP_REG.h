@@ -9,7 +9,7 @@
 
 #define WIFI_IP 	0
 #define	WIFI_MSK	1
-#define	PORT		2
+#define	WFPORT		2
 #define	ETH_IP		3
 #define	ETH_TRGT_IP	4
 #define	ETH_MSK		5

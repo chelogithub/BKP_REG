@@ -399,7 +399,7 @@ BKP_REG_RW(RTC_HandleTypeDef *RTCreg, uint8_t WR,struct BKP_REG * NVS )
 	{
 		  BKP_RG_IP(RTCreg,  WRITE, WIFI_IP		, NVS->_WIFI_IP);
 		  BKP_RG_IP(RTCreg,	 WRITE, WIFI_MSK	, NVS->_WIFI_MASK);
-		  BKP_RG_2int(RTCreg,WRITE, PORT 		, NVS->_WIFI_PORT ,NVS->_ETH_PORT);
+		  BKP_RG_2int(RTCreg,WRITE, WFPORT 		, NVS->_WIFI_PORT ,NVS->_ETH_PORT);
 		  BKP_RG_IP(RTCreg,  WRITE, ETH_IP		, NVS->_ETH_IP);
 		  BKP_RG_IP(RTCreg,  WRITE, ETH_TRGT_IP	, NVS->_ETH_TRGT_IP);
 		  BKP_RG_IP(RTCreg,  WRITE, ETH_MSK		, NVS->_ETH_MASK);
@@ -420,7 +420,7 @@ BKP_REG_RW(RTC_HandleTypeDef *RTCreg, uint8_t WR,struct BKP_REG * NVS )
 		{
 			  BKP_RG_IP(RTCreg,   READ, WIFI_IP		, NVS->_WIFI_IP);
 			  BKP_RG_IP(RTCreg,	  READ, WIFI_MSK		, NVS->_WIFI_MASK);
-			  BKP_RG_2int(RTCreg, READ, PORT 		, NVS->_WIFI_PORT ,NVS->_ETH_PORT);
+			  BKP_RG_2int(RTCreg, READ, WFPORT 		, NVS->_WIFI_PORT ,NVS->_ETH_PORT);
 			  BKP_RG_IP(RTCreg,   READ, ETH_IP		, NVS->_ETH_IP);
 			  BKP_RG_IP(RTCreg,   READ, ETH_TRGT_IP	, NVS->_ETH_TRGT_IP);
 			  BKP_RG_IP(RTCreg,   READ, ETH_MSK		, NVS->_ETH_MASK);
